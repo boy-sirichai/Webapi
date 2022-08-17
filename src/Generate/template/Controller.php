@@ -18,7 +18,6 @@ class {replace}Controller extends ApiController
     public function __construct({replace}Service ${replace_sm}Service)
     {
         $this->{replace_sm}Service  = ${replace_sm}Service;
-        parent::__construct();
     }
 
     /**

@@ -239,9 +239,6 @@ class GenerateFile implements GenerateFileInterface
      */
     protected function checkFilename($key)
     {
-        if (array_key_exists($key, $this->noNeedKey)) {
-            return $this->replace . '.php';
-        }
         return $this->replace . ucfirst($key) . '.php';
     }
 
@@ -253,20 +250,6 @@ class GenerateFile implements GenerateFileInterface
      */
     protected function processDuplicate($key, $property, $list)
     {
-        if ($key === 'Lang') {
-            foreach ($this->configLang as $key => $value) {
-                $path    = $list['target'] . '/' . $key;
-                $newFile = $this->readAndReplaceFile($list['resource']);
-
-                if (!is_dir($path)) {
-                    mkdir($path, 0777, true);
-                }
-                $fullPath = $path . '/' . strtolower($this->replace) . '.php';
-                file_put_contents($fullPath, $newFile);
-                $this->printLine($fullPath);
-            }
-
-        } else {
             foreach ($this->{$property} as $action => $need) {
                 if ($need === true) {
                     $this->action = ucfirst($action);
@@ -274,8 +257,6 @@ class GenerateFile implements GenerateFileInterface
                     $this->processReadWriteFile($filename, $list);
                 }
             }
-        }
-
     }
 
     /**
@@ -291,12 +272,7 @@ class GenerateFile implements GenerateFileInterface
         } else {
             $this->controllerNamespace = $this->controllerNamespace . '\\' . $this->replace;
         }
-        if ($this->useRepository === true) {
-            $this->repositoryNamespace = $this->repositoryNamespace . '\\' . $this->replace . 'Repository';
-        } else {
-            $this->repositoryNamespace = 'App\Repositories\\' . $this->replace . '\\' . $this->replace . 'RepositoryEloquent as ' . $this->replace . 'Repository';
 
-        }
         if ($list['needDir'] === true) {
             $path = $this->path . '/' . $list['target'] . '/' . $this->replace;
         } else {
@@ -361,7 +337,6 @@ class GenerateFile implements GenerateFileInterface
         $file = str_replace(array("{replace_url}"), $this->replaceUrl, $file);
         $file = str_replace(array("{action}"), ucfirst($this->action), $file);
         $file = str_replace(array("{controller_namespace}"), $this->controllerNamespace, $file);
-        $file = str_replace(array("{repository}"), $this->repositoryNamespace, $file);
         return $file;
     }
 

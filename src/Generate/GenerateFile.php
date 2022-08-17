@@ -80,7 +80,6 @@ class GenerateFile implements GenerateFileInterface
      * @var string[]
      */
     protected $needDuplicate = array(
-        'Request' => 'requestType',
         'Lang'    => 'configLang',
     );
 
@@ -116,13 +115,7 @@ class GenerateFile implements GenerateFileInterface
     /**
      * @var bool[]
      */
-    protected $requestType = array(
-        'Index'  => true,
-        'Store'  => true,
-        'Show'   => true,
-        'Update' => true,
-        'Delete' => true,
-    );
+    protected $requestType = array();
 
     /**
      * GenerateFile constructor.

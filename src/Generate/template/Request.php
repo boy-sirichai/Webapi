@@ -2,33 +2,14 @@
 
 namespace App\Http\Requests\{replace};
 
-use App\Contracts\FormRequest;
+use App\Classes\core_validation;
 
-class {action}{replace}Request extends FormRequest
+class {replace}Request extends core_validation
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
+     * @var string[]
      */
-    public function authorize()
-    {
-        return $this->hasRoles(['admin']) ||
-            $this->hasPermissions(['{replace_sm}.{action}']) ||
-            $this->hasPermissions(['{replace_sm}.*']);
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        return array(
-            #'name' => 'required'
-        );
-    }
+    protected $urlParameters = [];
 
     /**
      * Get custom messages for validator errors.

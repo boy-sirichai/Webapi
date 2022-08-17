@@ -9,25 +9,23 @@ class {replace}Request extends core_validation
     /**
      * @var string[]
      */
-    protected $urlParameters = [];
+    protected $urlParameters = [
+        'id',
+    ];
 
     /**
-     * Get custom messages for validator errors.
-     *
+     * @return string[]
+     */
+    public function rules()
+    {
+        return array();
+    }
+
+    /**
      * @return array
      */
     public function messages()
     {
-        return array (
-           #'name.required' => ':attribute is required'
-        );
-
-    }
-
-    public function attributes()
-    {
-        return array(
-            #'name' => trans('unit.name'),
-        );
+        return array();
     }
 }

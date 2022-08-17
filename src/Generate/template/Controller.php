@@ -8,13 +8,12 @@ use App\Http\Controllers\ApiController;
 
 class {replace}Controller extends ApiController
 {
-    private ${replace_sm}Services;
+    private ${replace_sm}Service;
 
     /**
      * Constructor
      *
      * @param {replace}Service ${replace_sm}Service
-     * @param {replace}Transformer ${replace_sm}Transformer
      */
     public function __construct({replace}Service ${replace_sm}Service)
     {
@@ -25,7 +24,7 @@ class {replace}Controller extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @param IndexRequest $request
+     * @param {replace}Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function {replace}Functional({replace}Request $request)

@@ -5,6 +5,11 @@ namespace Webapi\Generate;
 use Exception;
 use Illuminate\Support\Facades\Artisan;
 
+/**
+ * Class GenerateFile
+ * @package Webapi\Generate
+ * @author mr.sirichai janpan <boy.sirichai@bitkub.com>
+ */
 class GenerateFile implements GenerateFileInterface
 {
     /**
@@ -72,6 +77,14 @@ class GenerateFile implements GenerateFileInterface
     protected $controllerNamespace = 'App\Http\Controllers';
 
     /**
+     * @var string[]
+     */
+    protected $needDuplicate = array(
+        'Request' => 'requestType',
+        'Lang'    => 'configLang',
+    );
+
+    /**
      * set config path
      * @var array
      */
@@ -100,6 +113,9 @@ class GenerateFile implements GenerateFileInterface
         ),
     );
 
+    /**
+     * @var bool[]
+     */
     protected $requestType = array(
         'Index'  => true,
         'Store'  => true,
@@ -108,6 +124,10 @@ class GenerateFile implements GenerateFileInterface
         'Delete' => true,
     );
 
+    /**
+     * GenerateFile constructor.
+     * @param string $namespace
+     */
     public function __construct($namespace = '')
     {
         $this->setReplaceConfig($namespace);
@@ -120,6 +140,9 @@ class GenerateFile implements GenerateFileInterface
     }
 
 
+    /**
+     * @param $replace
+     */
     protected function setReplaceConfig($replace)
     {
         $this->replace      = ucfirst($replace);
@@ -129,29 +152,45 @@ class GenerateFile implements GenerateFileInterface
     }
 
 
+    /**
+     * @param array $config
+     */
     public function setConfig($config = array())
     {
         $this->config = $config;
     }
 
 
+    /**
+     * @param string $path
+     */
     public function setPath($path = '')
     {
         $this->path = $path;
     }
 
 
+    /**
+     * @param string $filename
+     */
     public function setFilename($filename = '')
     {
         $this->filename = $filename;
     }
 
 
+    /**
+     * @return string
+     */
     public function getFullFileName()
     {
         return $this->path . '/' . $this->filename;
     }
 
+    /**
+     * @param $data
+     * @return false|int
+     */
     public function writeFile($data)
     {
         if (!is_dir($this->path)) {
@@ -162,6 +201,10 @@ class GenerateFile implements GenerateFileInterface
     }
 
 
+    /**
+     * @param string $input
+     * @return string
+     */
     protected function strCamelCase($input = '')
     {
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
@@ -172,6 +215,9 @@ class GenerateFile implements GenerateFileInterface
         return implode('_', $ret);
     }
 
+    /**
+     *
+     */
     public function execute()
     {
         foreach ($this->configPath as $key => $list) {
@@ -187,6 +233,10 @@ class GenerateFile implements GenerateFileInterface
         }
     }
 
+    /**
+     * @param $key
+     * @return string
+     */
     protected function checkFilename($key)
     {
         if (array_key_exists($key, $this->noNeedKey)) {
@@ -195,6 +245,12 @@ class GenerateFile implements GenerateFileInterface
         return $this->replace . ucfirst($key) . '.php';
     }
 
+    /**
+     * @param $key
+     * @param $property
+     * @param $list
+     * @throws Exception
+     */
     protected function processDuplicate($key, $property, $list)
     {
         if ($key === 'Lang') {
@@ -222,6 +278,11 @@ class GenerateFile implements GenerateFileInterface
 
     }
 
+    /**
+     * @param $filename
+     * @param $list
+     * @throws Exception
+     */
     protected function processReadWriteFile($filename, $list)
     {
         $newFile = $this->readAndReplaceFile($list['resource']);
@@ -253,6 +314,9 @@ class GenerateFile implements GenerateFileInterface
     }
 
 
+    /**
+     * @param string $text
+     */
     protected function printLine($text = '')
     {
         echo "\r\n";
@@ -260,6 +324,11 @@ class GenerateFile implements GenerateFileInterface
     }
 
 
+    /**
+     * @param $config
+     * @return string|string[]
+     * @throws Exception
+     */
     protected function readAndReplaceFile($config)
     {
         if (file_exists((__DIR__ . '/' . $config))) {
@@ -270,12 +339,20 @@ class GenerateFile implements GenerateFileInterface
 
     }
 
+    /**
+     * @param string $input
+     * @return mixed|string|string[]
+     */
     protected function urlGenerate($input = '')
     {
         return str_replace("_", '-', $input);
     }
 
 
+    /**
+     * @param string $file
+     * @return string|string[]
+     */
     protected function replaceFile($file = '')
     {
         $file = str_replace(array("{replace}"), $this->replace, $file);
@@ -288,6 +365,9 @@ class GenerateFile implements GenerateFileInterface
         return $file;
     }
 
+    /**
+     * @param string $path
+     */
     public function appendRoute($path = 'api')
     {
         if (file_exists(base_path("routes/{$path}.php"))) {

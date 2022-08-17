@@ -2,7 +2,7 @@
 
 namespace Webapi\Providers;
 
-use Lumetor\Command\GenerateFileCommand;
+use Webapi\Command\GenerateFileCommand;
 use Illuminate\Support\ServiceProvider;
 
 /**

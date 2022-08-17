@@ -69,17 +69,7 @@ class GenerateFile implements GenerateFileInterface
     /** @var string
      * set namespace of controller
      */
-    protected $controllerNamespace = 'App\Http\Controllers\API\V1';
-
-    /** @var string
-     * set default repository namespace
-     */
-    protected $repositoryNamespace = 'App\Interfaces';
-
-    /** @var bool
-     * set default using repository
-     */
-    protected $useRepository = true;
+    protected $controllerNamespace = 'App\Http\Controllers';
 
     /**
      * set config path
@@ -98,61 +88,16 @@ class GenerateFile implements GenerateFileInterface
             'needDir'   => true,
             'namespace' => 'App\Http\Controllers',
         ),
-        'Model'              => array(
-            'resource' => 'template/Model.php',
-            'target'   => 'app/Models/',
-            'needDir'  => false,
-        ),
-        'RepositoryEloquent' => array(
-            'resource' => 'template/Repository.php',
-            'target'   => 'app/Repositories/',
-            'needDir'  => true,
-        ),
-        'Repository'         => array(
-            'resource' => 'template/Interface.php',
-            'target'   => 'app/Repositories/',
-            'needDir'  => true,
-        ),
         'Route'              => array(
             'resource' => 'template/Route.php',
             'target'   => 'Routes/',
             'needDir'  => true,
         ),
-        'Transformer'        => array(
-            'resource' => 'template/Transformer.php',
-            'target'   => 'app/Transformers/',
-            'needDir'  => false,
-        ),
-        'Factory'            => array(
-            'resource' => 'template/Factory.php',
-            'target'   => 'database/factories/',
-            'needDir'  => false,
-        ),
-        'Test'               => array(
-            'resource' => 'template/Tests.php',
-            'target'   => 'Tests/',
+        'Service'        => array(
+            'resource' => 'template/Service.php',
+            'target'   => 'app/Services/',
             'needDir'  => true,
         ),
-        'Seeder'             => array(
-            'resource' => 'template/Seeder.php',
-            'target'   => 'database/seeds/',
-            'needDir'  => true,
-        ),
-        'Lang'               => array(
-            'resource' => 'template/Lang.php',
-            'target'   => 'resources/lang/',
-            'needDir'  => true,
-            'lang'     => true,
-        ),
-    );
-
-    protected $noNeedKey = array(
-        'Model' => true,
-    );
-
-    protected $needDuplicate = array(
-        'Request' => 'requestType',
-        'Lang'    => 'configLang',
     );
 
     protected $requestType = array(
@@ -161,11 +106,6 @@ class GenerateFile implements GenerateFileInterface
         'Show'   => true,
         'Update' => true,
         'Delete' => true,
-    );
-
-    protected $configLang = array(
-        'en' => false,
-        'th' => false,
     );
 
     public function __construct($namespace = '')
@@ -242,7 +182,6 @@ class GenerateFile implements GenerateFileInterface
                 $this->processDuplicate($key, $property, $list);
             } else {
                 $filename = $this->checkFilename($key);
-//                $filename = $this->replace . ucfirst($key) . '.php';
                 $this->processReadWriteFile($filename, $list);
             }
         }
@@ -347,22 +286,6 @@ class GenerateFile implements GenerateFileInterface
         $file = str_replace(array("{controller_namespace}"), $this->controllerNamespace, $file);
         $file = str_replace(array("{repository}"), $this->repositoryNamespace, $file);
         return $file;
-    }
-
-    /**
-     * [makeMigration description]
-     * @return [type] [description]
-     */
-    public function makeMigration()
-    {
-        $tableName = $this->replaceSmall;
-        $call      = 'create_table_' . $tableName;
-        $this->printLine('run migration file');
-        $exitCode = Artisan::call('make:migration', array(
-            'name'     => $call,
-            '--create' => $tableName.'s',
-        ));
-        $this->printline('ok');
     }
 
     public function appendRoute($path = 'api')
